@@ -1,6 +1,9 @@
 # coding=gbk
 
 import MySQLdb
+# import sys
+# reload(sys)
+# sys.setdefaultencoding('utf-8')
 
 try:
     import user_data
@@ -16,6 +19,7 @@ conn = MySQLdb.connect(
     user = db_credential['user'],
     passwd = db_credential['password'],
     db = db_credential['database'],
+    charset = "utf8"
 )
 
 cursor = conn.cursor()
@@ -25,7 +29,7 @@ try:
     cursor.execute(sql)
     results = cursor.fetchall()
     for row in results:
-        print row
+        print "key = %s, value = %s" % (row[0], row[1])
 
 except Exception, e:
     print e
