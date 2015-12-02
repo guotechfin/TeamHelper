@@ -3,6 +3,8 @@
 import smtplib
 from email.mime.text import MIMEText
 
+week_no = 12
+
 try:
     import user_data
     mail_credential = user_data.mail_credential
@@ -20,7 +22,7 @@ def send_mail(cred, receive_list, copy_list, sub, content):
     mail_pass = cred['password']
     mail_host = mail_address.split('@')[1]
 
-    me = "admin" + "<" + mail_address + ">"
+    me = "OSVT项目组助理" + "<" + mail_address + ">"
     msg = MIMEText(content, _subtype='plain', _charset='gb2312')
     msg['Subject'] = sub
     msg['From'] = me
@@ -37,5 +39,28 @@ def send_mail(cred, receive_list, copy_list, sub, content):
         print str(e)
         return False
 
-send_mail(mail_credential, receive_list, copy_list, "Title", "hello world！")
+# send_mail(mail_credential, receive_list, copy_list, "Title", "hello world！")
+title = '【操作系统与虚拟化组第WEEK_NO周组会】通知与内容预告'
+content = '''各位老师、同学好：
+    本组第WEEK_NO周组会于下周二（后天）上午9:30召开，地点中科院实验室291，所有组员进行个人工作的PPT汇报，每人不超过20分钟。
 
+   罗杨：1）完成AsiaCCS'16投稿；2）推进patron的工程进展。
+   陈康：**没有按时写，下次注意**
+   孙茜：**没有按时写，下次注意**
+   罗武：ra进展
+   周鸿博：没有太多要讲，上周期中大作业和1/2的专题
+   刘威：OpenStack消息通信机制
+   濮阳天：**没有按时写，下次注意**
+
+
+--
+                      致
+礼！
+
+admin@osvt.net
+操作系统与虚拟化项目组
+北京大学软件与微电子学院
+'''
+title = title.replace('WEEK_NO', str(week_no))
+content = content.replace('WEEK_NO', str(week_no))
+send_mail(mail_credential, receive_list, copy_list, title, content)
