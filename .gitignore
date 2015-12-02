@@ -6,6 +6,7 @@ __pycache__/
 *.so
 
 .idea
+user_data.py
 
 # Distribution / packaging
 .Python

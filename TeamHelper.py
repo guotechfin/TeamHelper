@@ -8,20 +8,13 @@ import os
 import time
 import re
 
-user_list = {}
-user_list['xo'] = {'name': 'xo', 'email': 'admin@osvt.net', 'spell': 'osvtzhuli'}
-
-user_list['ly'] = {'name': 'ly', 'email': 'luoyang@pku.edu.cn', 'spell': 'luoyang'}
-user_list['lc'] = {'name': 'lc', 'email': '467545320@qq.com', 'spell': 'licong'}
-user_list['ck'] = {'name': 'ck', 'email': '372697306@qq.com', 'spell': 'chenkang'}
-user_list['lw'] = {'name': 'ck', 'email': 'lwyeluo@163.com', 'spell': 'luowu'}
-user_list['sq'] = {'name': 'ck', 'email': '569521289@qq.com', 'spell': 'sunqian'}
-user_list['lv'] = {'name': 'ck', 'email': 'liuwei_pku@pku.edu.cn', 'spell': 'liuwei'}
-user_list['zhb'] = {'name': 'ck', 'email': 'zhouhongbo199102@163.com', 'spell': 'zhouhongbo'}
-user_list['pyt'] = {'name': 'ck', 'email': 'puyangsky@163.com', 'spell': 'puyangtian'}
-
-user_list['qingnishen'] = {'name': 'qingnishen', 'email': 'qingnishen@ss.pku.edu.cn', 'spell': 'shenqingni'}
-user_list['wuzh'] = {'name': 'wuzh', 'email': 'wuzh@pku.edu.cn', 'spell': 'wuzhonghai'}
+try:
+    import user_data
+    user_list = user_data.user_list
+except:
+    print 'No user data, use default value'
+    user_list = {}
+    user_list['xo'] = {'name': 'xo', 'email': 'xxx@something.com', 'spell': 'osvtzhuli'}
 
 
 def QQ_setClipboardText(str):
