@@ -6,9 +6,23 @@ import win32api
 import win32clipboard
 import os
 import time
+import re
 
 user_list = {}
+user_list['xo'] = {'name': 'xo', 'email': 'admin@osvt.net', 'spell': 'osvtzhuli'}
+
 user_list['ly'] = {'name': 'ly', 'email': 'luoyang@pku.edu.cn', 'spell': 'luoyang'}
+user_list['lc'] = {'name': 'lc', 'email': '467545320@qq.com', 'spell': 'licong'}
+user_list['ck'] = {'name': 'ck', 'email': '372697306@qq.com', 'spell': 'chenkang'}
+user_list['lw'] = {'name': 'ck', 'email': 'lwyeluo@163.com', 'spell': 'luowu'}
+user_list['sq'] = {'name': 'ck', 'email': '569521289@qq.com', 'spell': 'sunqian'}
+user_list['lv'] = {'name': 'ck', 'email': 'liuwei_pku@pku.edu.cn', 'spell': 'liuwei'}
+user_list['zhb'] = {'name': 'ck', 'email': 'zhouhongbo199102@163.com', 'spell': 'zhouhongbo'}
+user_list['pyt'] = {'name': 'ck', 'email': 'puyangsky@163.com', 'spell': 'puyangtian'}
+
+user_list['qingnishen'] = {'name': 'qingnishen', 'email': 'qingnishen@ss.pku.edu.cn', 'spell': 'shenqingni'}
+user_list['wuzh'] = {'name': 'wuzh', 'email': 'wuzh@pku.edu.cn', 'spell': 'wuzhonghai'}
+
 
 def QQ_setClipboardText(str):
     win32clipboard.OpenClipboard()
@@ -31,12 +45,30 @@ def QQ_AtPerson(name):
 
     time.sleep(0.2)
 
-    QQ_setClipboardText(user_list[name]['spell'])
+    QQ_PrintText(user_list[name]['spell'])
 
     time.sleep(0.2)
 
     win32api.keybd_event(win32con.VK_RETURN, 0, 0, 0);
     win32api.keybd_event(win32con.VK_RETURN, 0, win32con.KEYEVENTF_KEYUP, 0);
+
+def QQ_PrintTextWithAt(str):
+    if str.find('@') != -1:
+        p = re.compile('([^@]*)(@[a-z @]*)( [^@]*)')
+        (before_text, name_list_text, after_text) = p.findall(str)[0]
+        name_list = name_list_text.replace('@', '').split(' ')
+        # before_text.strip(' ')
+        # after_text.strip(' ')
+        if after_text == ' ':
+            after_text = ''
+        print('before_text = %r, name_list = %r, after_text = %r' % (before_text, name_list, after_text))
+        QQ_PrintText(before_text)
+        for name in name_list:
+            QQ_AtPerson(name)
+        QQ_PrintText(after_text)
+    else:
+        print('before_text = %r' % (str))
+        QQ_PrintText(str)
 
 def QQ_Enter():
     win32api.keybd_event(win32con.VK_CONTROL, 0, 0, 0);
@@ -51,7 +83,7 @@ def QQ_SendTextWithAt(str):
     while True:
         time.sleep(0.5)
         hwnd = win32gui.FindWindow(None, 'OSVT小O测试群')
-        print ('try_time = %d, hwnd = %d' %(try_time, hwnd))
+        print('try_time = %d, hwnd = %d' % (try_time, hwnd))
         if hwnd != 0:
             break
         elif try_time >= 60:
@@ -62,9 +94,7 @@ def QQ_SendTextWithAt(str):
 
     win32gui.SetForegroundWindow(hwnd)
 
-    QQ_PrintText(str)
-    QQ_AtPerson('ly')
-    QQ_PrintText(str)
+    QQ_PrintTextWithAt(str)
     QQ_Enter()
 
     # win32gui.PostMessage(hwnd, win32con.WM_KEYDOWN, win32con.VK_RETURN, 0)
@@ -83,4 +113,5 @@ def QQ_SendTextWithAt(str):
     # win32gui.PostMessage(hwnd, win32con.WM_KEYUP, ord('V'), 0)
     # win32gui.PostMessage(hwnd, win32con.WM_KEYUP, win32con.VK_CONTROL, 0)
 
-QQ_SendTextWithAt('@OSVT助理小O 大家好！')
+QQ_SendTextWithAt('大家好，我是 @xo ，请多指教！')
+
