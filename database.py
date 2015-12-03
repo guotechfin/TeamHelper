@@ -15,6 +15,7 @@ except:
 
 
 def getMeetingInfo():
+    name_progress = {}
     conn = MySQLdb.connect(
         host = db_credential['host'],
         user = db_credential['user'],
@@ -34,13 +35,22 @@ def getMeetingInfo():
             m = p.search(row[1])
             if m:
                 str = m.group(1).replace('\\n', '\n')
-                print 'Meeting info from website:\n' + str
-                return str
-        return ''
+                str = str[str.rfind('-----') + 5:].strip()
+                # print 'Meeting info from website:\n' + str
+                name_progress = AnalyzeMeetingInfo(str)
     except Exception, e:
         print e
-        return ''
+        name_progress = None
 
     conn.close()
+    return name_progress
 
-getMeetingInfo()
+
+def AnalyzeMeetingInfo(str):
+    name_progress = {}
+    p = re.compile(u' ([\u4E00-\u9FA5]{2,3})[£º:](.*)')
+    m = p.findall(str)
+    for item in m:
+        print "name = %s, progress = %s" % (item[0], item[1])
+        name_progress[item[0]] = item[1]
+    return name_progress
