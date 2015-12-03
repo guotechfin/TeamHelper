@@ -61,6 +61,8 @@ admin@osvt.net
 操作系统与虚拟化项目组
 北京大学软件与微电子学院
 '''
-title = title.replace('WEEK_NO', str(week_no))
-content = content.replace('WEEK_NO', str(week_no))
-send_mail(mail_credential, receive_list, copy_list, title, content)
+
+if __name__ == '__main__':
+    title = title.replace('WEEK_NO', str(week_no))
+    content = content.replace('WEEK_NO', str(week_no))
+    send_mail(mail_credential, receive_list, copy_list, title, content)

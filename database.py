@@ -54,3 +54,7 @@ def AnalyzeMeetingInfo(str):
         print "name = %s, progress = %s" % (item[0], item[1])
         name_progress[item[0]] = item[1]
     return name_progress
+
+if __name__ == '__main__':
+    name_progress = getMeetingInfo()
+    print '\n'.join(name_progress)
