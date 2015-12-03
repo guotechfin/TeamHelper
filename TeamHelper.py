@@ -43,4 +43,14 @@ def performEvaluation():
                 info['remark'] = analyzeProgress(progress)
     printRemarks()
 
+def generateQQReport():
+    text = u'大家好，目前组会预告还有些问题，请大家完善后提交到osvt.net：\n'
+    for name in user_list.keys():
+        info = user_list[name]
+        if info['remark'] != '':
+            text = text + u'@' + info['name'] + u'：' + info['remark'] + '\n'
+    return text
+
 performEvaluation()
+report = generateQQReport()
+qq.QQ_SendTextWithAt(report)

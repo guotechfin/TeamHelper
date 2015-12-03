@@ -11,10 +11,12 @@ import re
 try:
     import user_data
     user_list = user_data.user_list
+    qq_shortcut = user_data.qq_shortcut
 except:
     print 'No user data, use default value'
     user_list = {}
     user_list['ly'] = {'name': 'ly', 'email': 'xxx@something.com', 'spell': 'osvtzhuli'}
+    qq_shortcut = '"C:\Program Files (x86)\Tencent\QQ\Bin\QQScLauncher.exe" /uin:XXXXXXXXX /quicklunch:449BDE2DE4BA357E6E9168FD55AB24059BB3CABB1EEF93699642E5891DC173715F5B4E3EDF68B41F'
 
 
 def QQ_setClipboardText(str):
@@ -47,7 +49,7 @@ def QQ_AtPerson(name):
 
 def QQ_PrintTextWithAt(str):
     if str.find('@') != -1:
-        p = re.compile('([^@]*)(@[a-z @]*)( [^@]*)')
+        p = re.compile('([^@]*)(@[a-z @]*)([^@]*)')
         (before_text, name_list_text, after_text) = p.findall(str)[0]
         name_list = name_list_text.replace('@', '').split(' ')
         # before_text.strip(' ')
@@ -70,7 +72,7 @@ def QQ_Enter():
     win32api.keybd_event(win32con.VK_CONTROL, 0, win32con.KEYEVENTF_KEYUP, 0);
 
 def QQ_SendTextWithAt(str):
-    os.system('"C:\Program Files (x86)\Tencent\QQ\Bin\QQScLauncher.exe" /uin:515964173 /quicklunch:449BDE2DE4BA357E6E9168FD55AB24059BB3CABB1EEF93699642E5891DC173715F5B4E3EDF68B41F')
+    os.system(qq_shortcut)
 
     try_time = 0
     while True:
