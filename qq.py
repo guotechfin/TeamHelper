@@ -18,20 +18,22 @@ except:
     user_list['ly'] = {'name': 'ly', 'email': 'xxx@something.com', 'spell': 'osvtzhuli'}
     qq_shortcut = '"C:\Program Files (x86)\Tencent\QQ\Bin\QQScLauncher.exe" /uin:XXXXXXXXX /quicklunch:449BDE2DE4BA357E6E9168FD55AB24059BB3CABB1EEF93699642E5891DC173715F5B4E3EDF68B41F'
 
-
+# Set the clipboard with a str.
 def QQ_setClipboardText(str):
     win32clipboard.OpenClipboard()
     win32clipboard.EmptyClipboard()
     win32clipboard.SetClipboardData(win32con.CF_TEXT, str)
     win32clipboard.CloseClipboard()
 
+# Print plain text.
 def QQ_PrintText(str):
-    QQ_setClipboardText(str)
+    QQ_setClipboardText(str.encode('gbk'))
     win32api.keybd_event(win32con.VK_CONTROL, 0, 0, 0);
     win32api.keybd_event(ord('V'), 0, 0, 0);
     win32api.keybd_event(ord('V'), 0, win32con.KEYEVENTF_KEYUP, 0);
     win32api.keybd_event(win32con.VK_CONTROL, 0, win32con.KEYEVENTF_KEYUP, 0);
 
+# AT a name.
 def QQ_AtPerson(name):
     win32api.keybd_event(win32con.VK_SHIFT, 0, 0, 0);
     win32api.keybd_event(ord('2'), 0, 0, 0);
@@ -47,30 +49,38 @@ def QQ_AtPerson(name):
     win32api.keybd_event(win32con.VK_RETURN, 0, 0, 0);
     win32api.keybd_event(win32con.VK_RETURN, 0, win32con.KEYEVENTF_KEYUP, 0);
 
-def QQ_PrintTextWithAt(str):
-    if str.find('@') != -1:
-        p = re.compile('([^@]*)(@[a-z @]*)([^@]*)')
-        (before_text, name_list_text, after_text) = p.findall(str)[0]
-        name_list = name_list_text.replace('@', '').split(' ')
-        # before_text.strip(' ')
-        # after_text.strip(' ')
-        if after_text == ' ':
-            after_text = ''
-        print('before_text = %s, name_list = %r, after_text = %s' % (before_text, name_list, after_text))
-        QQ_PrintText(before_text)
-        for name in name_list:
-            QQ_AtPerson(name)
-        QQ_PrintText(after_text)
-    else:
-        print('before_text = %s' % (str))
-        QQ_PrintText(str)
+# Parse out the AT directives.
+def QQ_parseText(str):
+    pos = str.find('@')
+    if pos == -1:
+        return [str]
 
+    for name in user_list.keys():
+        if str.startswith('@' + user_list[name]['name'], pos):
+            return [str[:pos]] + [str[pos:pos + 1 + len(user_list[name]['name'])]] + QQ_parseText(str[pos + 1 + len(user_list[name]['name']):])
+
+def QQ_PrintTextWithAt(str):
+    phrase_list = QQ_parseText(str)
+
+    print 'Sending: ',
+    for phrase in phrase_list:
+        print '"' + phrase + '",',
+
+    # Populate the textbox of QQ.
+    for phrase in phrase_list:
+        if phrase.startswith('@'):
+            QQ_AtPerson(phrase[1:])
+        else:
+            QQ_PrintText(phrase)
+
+# Press the "Enter' key.
 def QQ_Enter():
     win32api.keybd_event(win32con.VK_CONTROL, 0, 0, 0);
     win32api.keybd_event(win32con.VK_RETURN, 0, 0, 0);
     win32api.keybd_event(win32con.VK_RETURN, 0, win32con.KEYEVENTF_KEYUP, 0);
     win32api.keybd_event(win32con.VK_CONTROL, 0, win32con.KEYEVENTF_KEYUP, 0);
 
+# The interface function to send QQ a message.
 def QQ_SendTextWithAt(str):
     os.system(qq_shortcut)
 
@@ -109,4 +119,4 @@ def QQ_SendTextWithAt(str):
     # win32gui.PostMessage(hwnd, win32con.WM_KEYUP, win32con.VK_CONTROL, 0)
 
 if __name__ == '__main__':
-    QQ_SendTextWithAt('大家好，我是 @ly ，请多指教！')
+    QQ_SendTextWithAt(u'大家好，我是@ly，请多指教！')

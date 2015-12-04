@@ -44,11 +44,12 @@ def performEvaluation():
     printRemarks()
 
 def generateQQReport():
-    text = u'大家好，目前组会预告还有些问题，请大家完善后提交到osvt.net：\n'
+    text = u'大家好，目前组会预告还有些问题，请大家完善后提交到http://osvt.net:9000/p/meeting：\n'
     for name in user_list.keys():
         info = user_list[name]
         if info['remark'] != '':
             text = text + u'@' + info['name'] + u'：' + info['remark'] + '\n'
+    print 'Report:\n' + text
     return text
 
 performEvaluation()
