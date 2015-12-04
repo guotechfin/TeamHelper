@@ -3,8 +3,6 @@
 import smtplib
 from email.mime.text import MIMEText
 
-week_no = 12
-
 try:
     import user_data
     mail_credential = user_data.mail_credential
@@ -46,6 +44,7 @@ def mail_sendMails(title, content):
 
 
 if __name__ == '__main__':
+    week_no = 12
     title = '【操作系统与虚拟化组第WEEK_NO周组会】通知与内容预告'
     content = '''各位老师、同学好：
     本组第WEEK_NO周组会于下周二（后天）上午9:30召开，地点中科院实验室291，所有组员进行个人工作的PPT汇报，每人不超过20分钟。

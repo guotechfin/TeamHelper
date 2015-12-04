@@ -40,11 +40,11 @@ def QQ_AtPerson(name):
     win32api.keybd_event(ord('2'), 0, win32con.KEYEVENTF_KEYUP, 0);
     win32api.keybd_event(win32con.VK_SHIFT, 0, win32con.KEYEVENTF_KEYUP, 0);
 
-    time.sleep(0.2)
+    time.sleep(0.5)
 
     QQ_PrintText(user_list[name]['spell'])
 
-    time.sleep(0.2)
+    time.sleep(0.8)
 
     win32api.keybd_event(win32con.VK_RETURN, 0, 0, 0);
     win32api.keybd_event(win32con.VK_RETURN, 0, win32con.KEYEVENTF_KEYUP, 0);

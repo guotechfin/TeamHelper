@@ -3,6 +3,7 @@
 import qq
 import database
 import week_time
+import mail
 
 try:
     import user_data
@@ -63,6 +64,25 @@ def generateQQMeetingNotice():
     print 'Notice:\n' + text
     return text
 
+def generateMailTitleAndContent():
+    close = u'''
+
+
+--
+                      致
+礼！
+
+admin@osvt.net
+操作系统与虚拟化项目组
+北京大学软件与微电子学院
+'''
+    title = '【操作系统与虚拟化组第%d周组会】通知与内容预告' % (week_time.getWeekNo() + 1)
+    content = database.getMeetingInfo() + close
+    print 'Title:\n' + title
+    print 'Content:\n' + content
+    return (title, content)
+
+
 def task_RetrieveWebsiteAndSendQQReport():
     performEvaluation()
     report = generateQQReport()
@@ -72,7 +92,12 @@ def task_SendQQMeetingNotice():
     notice = generateQQMeetingNotice()
     qq.QQ_SendTextWithAt(notice)
 
+def task_SendNextMeetingMails():
+    (title, content) = generateMailTitleAndContent()
+    mail.mail_sendMails(title, content)
+
 
 if __name__ == '__main__':
-    task_RetrieveWebsiteAndSendQQReport()
+    # task_RetrieveWebsiteAndSendQQReport()
     # task_SendQQMeetingNotice()
+    task_SendNextMeetingMails()
