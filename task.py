@@ -2,6 +2,7 @@
 
 import qq
 import database
+import week_time
 
 try:
     import user_data
@@ -52,11 +53,26 @@ def generateQQReport():
     print 'Report:\n' + text
     return text
 
-def task_RetrieveWebsiteAndSendReport():
+def generateQQMeetingNotice():
+    text = u'大家好，组会定于下周二上午9:30召开，沈老师会出席，本周轮到'
+    for name in user_list.keys():
+        info = user_list[name]
+        if info['type'] == week_time.getWeekNo() % 2:
+            text = text + u'@' + info['name']
+    text = text + u'做个人科研进展&思路汇报。每人把汇报概要在项目组官网填好，邮件里用，截止到周日晚22:00），网址：http://osvt.net:9000/p/meeting'
+    print 'Notice:\n' + text
+    return text
+
+def task_RetrieveWebsiteAndSendQQReport():
     performEvaluation()
     report = generateQQReport()
     qq.QQ_SendTextWithAt(report)
 
+def task_SendQQMeetingNotice():
+    notice = generateQQMeetingNotice()
+    qq.QQ_SendTextWithAt(notice)
+
 
 if __name__ == '__main__':
-    task_RetrieveWebsiteAndSendReport()
+    # task_RetrieveWebsiteAndSendQQReport()
+    task_SendQQMeetingNotice()

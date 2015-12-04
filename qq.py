@@ -61,6 +61,11 @@ def QQ_parseText(str):
 
 def QQ_PrintTextWithAt(str):
     phrase_list = QQ_parseText(str)
+    temp_list = []
+    for phrase in phrase_list:
+        if phrase != '':
+            temp_list.append(phrase)
+    phrase_list = temp_list
 
     print 'Sending: ',
     for phrase in phrase_list:
