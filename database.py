@@ -15,7 +15,6 @@ except:
 
 
 def getMeetingInfo():
-    name_progress = {}
     conn = MySQLdb.connect(
         host = db_credential['host'],
         user = db_credential['user'],

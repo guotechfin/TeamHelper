@@ -1,9 +1,6 @@
 # coding=gbk
 
-import time
 from datetime import datetime
-
-print time.localtime()
 
 
 def getWeekNo():

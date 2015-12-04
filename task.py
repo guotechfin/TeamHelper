@@ -8,10 +8,12 @@ import mail
 try:
     import user_data
     user_list = user_data.user_list
+    record_list = user_data.record_list
 except:
     print 'No user data, use default value'
     user_list = {}
     user_list['ly'] = {'name': 'ly', 'email': 'xxx@something.com', 'spell': 'osvtzhuli'}
+    record_list = ['ly']
 
 
 def analyzeProgress(str):
@@ -46,13 +48,20 @@ def performEvaluation():
     printRemarks()
 
 def generateQQReport():
+    has_issue = 0
     text = u'大家好，目前组会预告还有些问题，请大家完善后提交到http://osvt.net:9000/p/meeting：\n'
     for name in user_list.keys():
         info = user_list[name]
         if info['remark'] != '':
             text = text + u'@' + info['name'] + u'：' + info['remark'] + '\n'
+            has_issue = 1
+    if has_issue == 0:
+        text = 'OK'
     print 'Report:\n' + text
     return text
+
+def getRecordPerson():
+    return record_list[week_time.getWeekNo() % len(record_list)]
 
 def generateQQMeetingNotice():
     text = u'大家好，组会定于下周二上午9:30召开，沈老师会出席，本周轮到'
@@ -61,6 +70,7 @@ def generateQQMeetingNotice():
         if info['type'] == week_time.getWeekNo() % 2:
             text = text + u'@' + info['name']
     text = text + u'做个人科研进展&思路汇报。每人把汇报概要在项目组官网填好，邮件里用，截止到周日晚22:00），网址：http://osvt.net:9000/p/meeting'
+    text = text + u'，本周轮到@' + getRecordPerson() + u'做会议记录，组会结束后两天内提交至：\\\\osvt.net\\osv\\Audit\\每周会议记录\\OSVT-15年秋季学期会议记录'
     print 'Notice:\n' + text
     return text
 
@@ -83,14 +93,15 @@ admin@osvt.net
     return (title, content)
 
 
-def task_RetrieveWebsiteAndSendQQReport():
-    performEvaluation()
-    report = generateQQReport()
-    qq.QQ_SendTextWithAt(report)
-
 def task_SendQQMeetingNotice():
     notice = generateQQMeetingNotice()
     qq.QQ_SendTextWithAt(notice)
+
+def task_RetrieveWebsiteAndSendQQReport():
+    performEvaluation()
+    report = generateQQReport()
+    if report != 'OK':
+        qq.QQ_SendTextWithAt(report)
 
 def task_SendNextMeetingMails():
     (title, content) = generateMailTitleAndContent()
@@ -98,6 +109,6 @@ def task_SendNextMeetingMails():
 
 
 if __name__ == '__main__':
-    # task_RetrieveWebsiteAndSendQQReport()
     # task_SendQQMeetingNotice()
+    # task_RetrieveWebsiteAndSendQQReport()
     task_SendNextMeetingMails()
