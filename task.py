@@ -31,7 +31,7 @@ def printRemarks():
 
 
 def performEvaluation():
-    name_progress = database.getMeetingInfo()
+    name_progress = database.analyzeMeetingInfo(database.getMeetingInfo())
     # print '\n'.join(name_progress)
 
     print ''
@@ -74,5 +74,5 @@ def task_SendQQMeetingNotice():
 
 
 if __name__ == '__main__':
-    # task_RetrieveWebsiteAndSendQQReport()
-    task_SendQQMeetingNotice()
+    task_RetrieveWebsiteAndSendQQReport()
+    # task_SendQQMeetingNotice()

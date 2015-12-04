@@ -17,7 +17,7 @@ except:
     copy_list=['cc@qq.something.com']
 
 
-def send_mail(cred, receive_list, copy_list, sub, content):
+def send_mails(cred, receive_list, copy_list, sub, content):
     mail_address = cred['address']
     mail_pass = cred['password']
     mail_host = mail_address.split('@')[1]
@@ -39,9 +39,15 @@ def send_mail(cred, receive_list, copy_list, sub, content):
         print str(e)
         return False
 
+def mail_sendMails(title, content):
+    send_mails(mail_credential, receive_list, copy_list, title, content)
+
 # send_mail(mail_credential, receive_list, copy_list, "Title", "hello world！")
-title = '【操作系统与虚拟化组第WEEK_NO周组会】通知与内容预告'
-content = '''各位老师、同学好：
+
+
+if __name__ == '__main__':
+    title = '【操作系统与虚拟化组第WEEK_NO周组会】通知与内容预告'
+    content = '''各位老师、同学好：
     本组第WEEK_NO周组会于下周二（后天）上午9:30召开，地点中科院实验室291，所有组员进行个人工作的PPT汇报，每人不超过20分钟。
 
    罗杨：1）完成AsiaCCS'16投稿；2）推进patron的工程进展。
@@ -61,8 +67,6 @@ admin@osvt.net
 操作系统与虚拟化项目组
 北京大学软件与微电子学院
 '''
-
-if __name__ == '__main__':
     title = title.replace('WEEK_NO', str(week_no))
     content = content.replace('WEEK_NO', str(week_no))
-    send_mail(mail_credential, receive_list, copy_list, title, content)
+    mail_sendMails(title, content)

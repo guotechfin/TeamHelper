@@ -37,16 +37,16 @@ def getMeetingInfo():
                 str = m.group(1).replace('\\n', '\n')
                 str = str[str.rfind('-----') + 5:].strip()
                 # print 'Meeting info from website:\n' + str
-                name_progress = AnalyzeMeetingInfo(str)
+                return str
     except Exception, e:
         print e
-        name_progress = None
+        return ''
 
     conn.close()
-    return name_progress
+    return ''
 
 
-def AnalyzeMeetingInfo(str):
+def analyzeMeetingInfo(str):
     name_progress = {}
     p = re.compile(u' ([\u4E00-\u9FA5]{2,3})[£º:](.*)')
     m = p.findall(str)
@@ -56,5 +56,5 @@ def AnalyzeMeetingInfo(str):
     return name_progress
 
 if __name__ == '__main__':
-    name_progress = getMeetingInfo()
+    name_progress = analyzeMeetingInfo(getMeetingInfo())
     print '\n'.join(name_progress)
