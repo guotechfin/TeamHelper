@@ -20,10 +20,12 @@ def analyzeProgress(str):
     res = ''
     if str.find(u'没有按时写，下次注意') != -1:
         res = u'组会预告未填写！'
+    elif len(str) == 0:
+        res = u'组会预告未填写！'
     elif len(str) < 8:
         res = u'组会预告长度过短，至少8个字！'
     else:
-        res = ''
+        res = u''
     # print "Text: %s, Result: %s" %(str, res)
     return res
 
@@ -36,6 +38,10 @@ def printRemarks():
 def performEvaluation():
     name_progress = database.analyzeMeetingInfo(database.getMeetingInfo())
     # print '\n'.join(name_progress)
+
+    for name in user_list.keys():
+        info = user_list[name]
+        info['remark'] = u''
 
     print ''
     for cname in name_progress.keys():
@@ -69,7 +75,7 @@ def generateQQMeetingNotice():
         info = user_list[name]
         if info['type'] == week_time.getWeekNo() % 2:
             text = text + u'@' + info['name']
-    text = text + u'做个人科研进展&思路汇报。每人把汇报概要在项目组官网填好，邮件里用，截止到周日晚22:00），网址：http://osvt.net:9000/p/meeting'
+    text = text + u'做个人科研进展&思路汇报。每人把汇报概要在项目组官网填好（邮件里用，截止到周日晚22:00），网址：http://osvt.net:9000/p/meeting'
     text = text + u'，本周轮到@' + getRecordPerson() + u'做会议记录，组会结束后两天内提交至：\\\\osvt.net\\osv\\Audit\\每周会议记录\\OSVT-15年秋季学期会议记录'
     print 'Notice:\n' + text
     return text
@@ -88,9 +94,20 @@ admin@osvt.net
 '''
     title = '【操作系统与虚拟化组第%d周组会】通知与内容预告' % (week_time.getWeekNo() + 1)
     content = database.getMeetingInfo() + close
-    print 'Title:\n' + title
-    print 'Content:\n' + content
     return (title, content)
+
+def addRemarksToMail(str):
+    for name in user_list.keys():
+        info = user_list[name]
+        if info['remark'] != u'':
+            pos = str.find(info['cname'] + u'：')
+            if pos == -1:
+                continue
+            pos = str.find('\n', pos)
+            if pos == -1:
+                continue
+            str = str[:pos] + u' （' + info['remark'] + u'）' + str[pos:]
+    return str
 
 
 def task_SendQQMeetingNotice():
@@ -105,6 +122,9 @@ def task_RetrieveWebsiteAndSendQQReport():
 
 def task_SendNextMeetingMails():
     (title, content) = generateMailTitleAndContent()
+    content = addRemarksToMail(content)
+    print 'Title:\n' + title
+    print 'Content:\n' + content
     mail.mail_sendMails(title, content)
 
 
