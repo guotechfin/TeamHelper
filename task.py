@@ -110,7 +110,7 @@ admin@osvt.net
     content = database.getMeetingInfo() + close
     return (title, content)
 
-def addRemarksToMail(str):
+def addMeetingRemarksToMail(str):
     for name in user_list.keys():
         info = user_list[name]
         if info['remark'] != u'':
@@ -123,6 +123,12 @@ def addRemarksToMail(str):
             str = str[:pos] + u' （' + info['remark'] + u'）' + str[pos:]
     return str
 
+def addRecordRemarkToMail(str):
+    if samba.check_meeting_record() == True:
+        return str
+    info = user_list[getLastRecordPerson()]
+    str = str.replace(u'每人不超过40分钟。', u'每人不超过40分钟。另外，上周组会会议记录还未提交，请' + info['cname'] + u'尽快提交。')
+    return str
 
 def task_SendQQMeetingNotice():
     notice = generateQQMeetingNotice()
@@ -145,7 +151,8 @@ def task_RetrieveRecordAndSendQQReport():
 
 def task_SendNextMeetingMails():
     (title, content) = generateMailTitleAndContent()
-    content = addRemarksToMail(content)
+    content = addMeetingRemarksToMail(content)
+    content = addRecordRemarkToMail(content)
     print 'Title:\n' + title
     print 'Content:\n' + content
     mail.mail_sendMails(title, content)
@@ -154,7 +161,7 @@ def task_SendNextMeetingMails():
 if __name__ == '__main__':
     # task_SendQQMeetingNotice()
     # task_RetrieveWebsiteAndSendQQReport()
-    # task_SendNextMeetingMails()
+    task_SendNextMeetingMails()
 
     # task_SendQQRecordNotice()
-    task_RetrieveRecordAndSendQQReport()
+    # task_RetrieveRecordAndSendQQReport()
