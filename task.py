@@ -69,6 +69,9 @@ def generateQQReport():
 def getRecordPerson():
     return record_list[week_time.getWeekNo() % len(record_list)]
 
+def getLastRecordPerson():
+    return record_list[(week_time.getWeekNo() - 1) % len(record_list)]
+
 def generateQQMeetingNotice():
     text = u'大家好，组会定于下周二上午9:30召开，沈老师会出席，本周轮到'
     for name in user_list.keys():
@@ -77,7 +80,12 @@ def generateQQMeetingNotice():
             text = text + u'@' + info['name']
     text = text + u'做个人科研进展&思路汇报。每人把汇报概要在项目组官网填好（邮件里用，截止到周日晚22:00），网址：http://osvt.net:9000/p/meeting'
     text = text + u'，本周轮到@' + getRecordPerson() + u'做会议记录，组会结束后两天内提交至：\\\\osvt.net\\osv\\Audit\\每周会议记录\\OSVT-15年秋季学期会议记录'
-    print 'Notice:\n' + text
+    print 'Meeting Notice:\n' + text
+    return text
+
+def generateQQRecordNotice():
+    text = u'本周组会已结束，会议记录由@' + getLastRecordPerson() + u'整理后，周三晚22:00之前提交至：\\\\osvt.net\\osv\\Audit\\每周会议记录\\OSVT-15年秋季学期会议记录'
+    print 'Record Notice:\n' + text
     return text
 
 def generateMailTitleAndContent():
@@ -114,6 +122,10 @@ def task_SendQQMeetingNotice():
     notice = generateQQMeetingNotice()
     qq.QQ_SendTextWithAt(notice)
 
+def task_SendQQRecordNotice():
+    notice = generateQQRecordNotice()
+    qq.QQ_SendTextWithAt(notice)
+
 def task_RetrieveWebsiteAndSendQQReport():
     performEvaluation()
     report = generateQQReport()
@@ -131,4 +143,6 @@ def task_SendNextMeetingMails():
 if __name__ == '__main__':
     # task_SendQQMeetingNotice()
     # task_RetrieveWebsiteAndSendQQReport()
-    task_SendNextMeetingMails()
+    #task_SendNextMeetingMails()
+
+    task_SendQQRecordNotice()
