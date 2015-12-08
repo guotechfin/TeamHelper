@@ -150,6 +150,7 @@ def task_RetrieveRecordAndSendQQReport():
         qq.QQ_SendTextWithAt(report)
 
 def task_SendNextMeetingMails():
+    performEvaluation()
     (title, content) = generateMailTitleAndContent()
     content = addMeetingRemarksToMail(content)
     content = addRecordRemarkToMail(content)
