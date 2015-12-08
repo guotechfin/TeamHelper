@@ -4,6 +4,7 @@ import qq
 import database
 import week_time
 import mail
+import samba
 
 try:
     import user_data
@@ -53,7 +54,7 @@ def performEvaluation():
                 info['remark'] = analyzeProgress(progress)
     printRemarks()
 
-def generateQQReport():
+def generateQQMeetingReport():
     has_issue = 0
     text = u'大家好，目前组会预告还有些问题，请大家完善后提交到http://osvt.net:9000/p/meeting：\n'
     for name in user_list.keys():
@@ -63,7 +64,7 @@ def generateQQReport():
             has_issue = 1
     if has_issue == 0:
         text = 'OK'
-    print 'Report:\n' + text
+    print 'Meeting Report:\n' + text
     return text
 
 def getRecordPerson():
@@ -84,8 +85,13 @@ def generateQQMeetingNotice():
     return text
 
 def generateQQRecordNotice():
-    text = u'本周组会已结束，会议记录由@' + getLastRecordPerson() + u'整理后，周三晚22:00之前提交至：\\\\osvt.net\\osv\\Audit\\每周会议记录\\OSVT-15年秋季学期会议记录'
+    text = u'大家好，本周组会已结束，会议记录由@' + getLastRecordPerson() + u'整理后，周三晚22:00之前提交至：\\\\osvt.net\\osv\\Audit\\每周会议记录\\OSVT-15年秋季学期会议记录'
     print 'Record Notice:\n' + text
+    return text
+
+def generateQQRecordReport():
+    text = u'大家好，目前组会会议记录仍未提交，@' + getLastRecordPerson() + u'尽快整理后，提交至：\\\\osvt.net\\osv\\Audit\\每周会议记录\\OSVT-15年秋季学期会议记录'
+    print 'Record Report:\n' + text
     return text
 
 def generateMailTitleAndContent():
@@ -128,8 +134,13 @@ def task_SendQQRecordNotice():
 
 def task_RetrieveWebsiteAndSendQQReport():
     performEvaluation()
-    report = generateQQReport()
+    report = generateQQMeetingReport()
     if report != 'OK':
+        qq.QQ_SendTextWithAt(report)
+
+def task_RetrieveRecordAndSendQQReport():
+    if samba.check_meeting_record() == False:
+        report = generateQQRecordReport()
         qq.QQ_SendTextWithAt(report)
 
 def task_SendNextMeetingMails():
@@ -143,6 +154,7 @@ def task_SendNextMeetingMails():
 if __name__ == '__main__':
     # task_SendQQMeetingNotice()
     # task_RetrieveWebsiteAndSendQQReport()
-    #task_SendNextMeetingMails()
+    # task_SendNextMeetingMails()
 
-    task_SendQQRecordNotice()
+    # task_SendQQRecordNotice()
+    task_RetrieveRecordAndSendQQReport()

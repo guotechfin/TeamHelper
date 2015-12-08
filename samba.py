@@ -42,4 +42,4 @@ def check_meeting_record():
 
 
 if __name__ == '__main__':
-    check_meeting_record()
+    res = check_meeting_record()
