@@ -92,8 +92,8 @@ def QQ_SendTextWithAt(str):
     try_time = 0
     while True:
         time.sleep(0.5)
-        # hwnd = win32gui.FindWindow(None, '操作系统&虚拟化小组')
-        hwnd = win32gui.FindWindow(None, 'OSVT小O测试群')
+        hwnd = win32gui.FindWindow(None, '操作系统&虚拟化小组')
+        # hwnd = win32gui.FindWindow(None, 'OSVT小O测试群')
         print('try_time = %d, hwnd = %d' % (try_time, hwnd))
         if hwnd != 0:
             break
