@@ -80,17 +80,17 @@ def generateQQMeetingNotice():
         if info['type'] == week_time.getWeekNo() % 2:
             text = text + u'@' + info['name']
     text = text + u'做个人科研进展&思路汇报。每人把汇报概要在项目组官网填好（邮件里用，截止到周日晚22:00），网址：http://osvt.net:9000/p/meeting'
-    text = text + u'，本周轮到@' + getRecordPerson() + u'做会议记录，组会结束后两天内提交至：\\\\osvt.net\\osv\\Audit\\每周会议记录\\OSVT-15年秋季学期会议记录'
+    text = text + u'，本周轮到@' + getRecordPerson() + u'做会议记录，组会结束后两天内提交至：\\\\osvt.net\\osv\\Audit\\每周会议记录\\OSVT-16年春季学期会议记录'
     print 'Meeting Notice:\n' + text
     return text
 
 def generateQQRecordNotice():
-    text = u'大家好，本周组会已结束，会议记录由@' + getLastRecordPerson() + u'整理后，周三晚22:00之前提交至：\\\\osvt.net\\osv\\Audit\\每周会议记录\\OSVT-15年秋季学期会议记录'
+    text = u'大家好，本周组会已结束，会议记录由@' + getLastRecordPerson() + u'整理后，周三晚22:00之前提交至：\\\\osvt.net\\osv\\Audit\\每周会议记录\\OSVT-16年春季学期会议记录'
     print 'Record Notice:\n' + text
     return text
 
 def generateQQRecordReport():
-    text = u'大家好，目前组会会议记录仍未提交，@' + getLastRecordPerson() + u'尽快整理后，提交至：\\\\osvt.net\\osv\\Audit\\每周会议记录\\OSVT-15年秋季学期会议记录'
+    text = u'大家好，目前组会会议记录仍未提交，@' + getLastRecordPerson() + u'尽快整理后，提交至：\\\\osvt.net\\osv\\Audit\\每周会议记录\\OSVT-16年春季学期会议记录'
     print 'Record Report:\n' + text
     return text
 

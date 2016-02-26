@@ -16,7 +16,7 @@ def getFileList():
     conn = SMBConnection(smb_credential['user'], smb_credential['password'], "", smb_credential['hostname'], use_ntlm_v2 = True)
     conn.connect(smb_credential['host'], 139)
 
-    file_list = conn.listPath('OSV', u'/Audit/每周会议记录/OSVT-15年秋季学期会议记录')
+    file_list = conn.listPath('OSV', u'/Audit/每周会议记录/OSVT-16年春季学期会议记录')
     for f in file_list:
         if f.filename != '.' and f.filename != '..':
             filename_list.append(f.filename)
