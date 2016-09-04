@@ -106,7 +106,7 @@ admin@osvt.net
 操作系统与虚拟化项目组
 北京大学软件与微电子学院
 '''
-    title = '【操作系统与虚拟化组第%d周组会】通知与内容预告' % (week_time.getWeekNo() + 1)
+    title = '【操作系统与虚拟化组2016年秋季学期第%d周组会】通知与内容预告' % (week_time.getWeekNo() + 1)
     content = database.getMeetingInfo() + close
     return (title, content)
 
@@ -162,7 +162,16 @@ def task_SendNextMeetingMails():
 if __name__ == '__main__':
     # task_SendQQMeetingNotice()
     # task_RetrieveWebsiteAndSendQQReport()
-    task_SendNextMeetingMails()
+    # task_SendNextMeetingMails()
+    print week_time.getWeekNo()
+    print getLastRecordPerson()
+
+    text = ''
+    for name in user_list.keys():
+        info = user_list[name]
+        if info['type'] == week_time.getWeekNo() % 2:
+            text = text + u'@' + info['name']
+    print text
 
     # task_SendQQRecordNotice()
     # task_RetrieveRecordAndSendQQReport()
